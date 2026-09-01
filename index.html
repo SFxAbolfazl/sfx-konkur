@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SFX | مسیر کنکور ۱۴۰۶</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="authModal" style="position:fixed;inset:0;background:#05070be8;z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div style="background:#151b2a;border:1px solid #303a52;border-radius:18px;padding:30px;width:380px;box-shadow:0 30px 80px #0009;text-align:center;">
+    <div style="font-size:32px;margin-bottom:12px;">🔒</div>
+    <h3 style="margin:0 0 8px;font-size:18px;color:#eef1f8;">ورود به پنل SFX</h3>
+    <p style="color:#929bb1;font-size:12px;margin-bottom:20px;">لطفاً رمز عبور را وارد کنید </p>
+    <input type="password" id="authPassInput" placeholder="رمز عبور..." style="width:100%;background:#0e131e;color:#eef1f8;border:1px solid #293247;border-radius:10px;padding:12px;text-align:center;font-size:16px;letter-spacing:4px;outline:none;margin-bottom:15px;">
+    <button id="authBtn" style="width:100%;padding:12px;border-radius:10px;background:linear-gradient(135deg,#8172f4,#6255d8);color:#fff;font-weight:bold;border:0;cursor:pointer;">ورود به پنل</button>
+    <div id="authError" style="color:#ff6b78;font-size:11px;margin-top:10px;display:none;">رمز عبور اشتباه است!</div>
+  </div>
+</div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <button id="closeSidebar" class="mobile-only" style="background:transparent;color:#fff;font-size:24px;position:absolute;left:15px;top:15px;">×</button>
+    <div class="brand"><div class="brand-icon">⚡</div><div><b>SFX</b><small>مسیر کنکور ۱۴۰۶</small></div></div>
+    <nav>
+      <button class="nav active" data-page="dashboard"><span>🏠</span> داشبورد</button>
+      <button class="nav" data-page="today"><span>☀️</span> امروز</button>
+      <button class="nav" data-page="days"><span>📅</span> روزها</button>
+      <button class="nav" data-page="subjects"><span>📚</span> درس‌ها</button>
+      <button class="nav" data-page="stats"><span>📊</span> آمار و نمودار</button>
+      <button class="nav" data-page="exams"><span>📝</span> آزمون‌ها</button>
+      <button class="nav" data-page="timer"><span>⏱️</span> تایمر مطالعه</button>
+      <button class="nav" data-page="goals"><span>🎯</span> اهداف و یادآوری</button>
+      <button class="nav" data-page="settings"><span>⚙️</span> تنظیمات</button>
+    </nav>
+    <div class="sidebar-bottom">● ذخیره‌سازی محلی فعال است<br><small>اطلاعات روی همین دستگاه می‌ماند.</small></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:15px;">
+        <button id="openSidebar" class="mobile-only" style="background:transparent;color:#fff;font-size:24px;">☰</button>
+        <div><div class="eyebrow">سیستم شخصی مطالعه (SFX)</div><h1 id="pageTitle">داشبورد</h1></div>
+      </div>
+      <div class="today-chip">📅 <span id="todayLabel"></span></div>
+    </header>
+    <div id="content"></div>
+
+    <footer style="margin-top: 50px; padding: 20px 0; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 12px; flex-wrap: wrap; gap: 10px;">
+      <div>Made by Abolfazl (energy)</div>
+      <div>
+        <a href="https://t.me/SFXENERGY" target="_blank" style="color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; background: #171d2d; padding: 8px 16px; border-radius: 10px; border: 1px solid var(--line); transition: .2s;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#51d5e8"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.324-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.14.12.098.153.228.166.331.012.102.024.331.012.511z"/></svg>
+          تلگرام من
+        </a>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<div id="modal" class="modal hidden"></div><div id="toast"></div>
+
+<script>
+  if(localStorage.getItem("sfx_authenticated") === "true") {
+    document.getElementById("authModal").style.display = "none";
+  }
+  document.getElementById("authBtn").onclick = () => {
+    let val = document.getElementById("authPassInput").value;
+    let storedPass = localStorage.getItem("sfx_pass") || "9999";
+    if(val === storedPass) {
+      localStorage.setItem("sfx_authenticated", "true");
+      document.getElementById("authModal").style.display = "none";
+    } else {
+      document.getElementById("authError").style.display = "block";
+    }
+  };
+  document.getElementById("authPassInput").onkeypress = (e) => {
+    if(e.key === "Enter") document.getElementById("authBtn").click();
+  };
+
+  // Mobile menu logic
+  document.getElementById('openSidebar').onclick = () => document.getElementById('sidebar').classList.add('open');
+  document.getElementById('closeSidebar').onclick = () => document.getElementById('sidebar').classList.remove('open');
+</script>
+<script src="app.js"></script>
+</body>
+</html>
