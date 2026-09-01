@@ -19,7 +19,8 @@
 </div>
 
 <div class="app">
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
+    <button id="closeSidebar" class="mobile-only" style="background:transparent;color:#fff;font-size:24px;position:absolute;left:15px;top:15px;">×</button>
     <div class="brand"><div class="brand-icon">⚡</div><div><b>SFX</b><small>مسیر کنکور ۱۴۰۶</small></div></div>
     <nav>
       <button class="nav active" data-page="dashboard"><span>🏠</span> داشبورد</button>
@@ -37,12 +38,15 @@
 
   <main class="main">
     <header class="topbar">
-      <div><div class="eyebrow">سیستم شخصی مطالعه (SFX)</div><h1 id="pageTitle">داشبورد</h1></div>
+      <div style="display:flex;align-items:center;gap:15px;">
+        <button id="openSidebar" class="mobile-only" style="background:transparent;color:#fff;font-size:24px;">☰</button>
+        <div><div class="eyebrow">سیستم شخصی مطالعه (SFX)</div><h1 id="pageTitle">داشبورد</h1></div>
+      </div>
       <div class="today-chip">📅 <span id="todayLabel"></span></div>
     </header>
     <div id="content"></div>
 
-    <footer style="margin-top: 50px; padding: 20px 0; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 12px;">
+    <footer style="margin-top: 50px; padding: 20px 0; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 12px; flex-wrap: wrap; gap: 10px;">
       <div>Made by Abolfazl (energy)</div>
       <div>
         <a href="https://t.me/SFXENERGY" target="_blank" style="color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; background: #171d2d; padding: 8px 16px; border-radius: 10px; border: 1px solid var(--line); transition: .2s;">
@@ -62,17 +66,21 @@
   }
   document.getElementById("authBtn").onclick = () => {
     let val = document.getElementById("authPassInput").value;
-    if(val === "9999") {
+    let storedPass = localStorage.getItem("sfx_pass") || "9999";
+    if(val === storedPass) {
       localStorage.setItem("sfx_authenticated", "true");
       document.getElementById("authModal").style.display = "none";
     } else {
-      let err = document.getElementById("authError");
-      err.style.display = "block";
+      document.getElementById("authError").style.display = "block";
     }
   };
   document.getElementById("authPassInput").onkeypress = (e) => {
     if(e.key === "Enter") document.getElementById("authBtn").click();
   };
+
+  // Mobile menu logic
+  document.getElementById('openSidebar').onclick = () => document.getElementById('sidebar').classList.add('open');
+  document.getElementById('closeSidebar').onclick = () => document.getElementById('sidebar').classList.remove('open');
 </script>
 <script src="app.js"></script>
 </body>
